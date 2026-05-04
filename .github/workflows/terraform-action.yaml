@@ -63,7 +63,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const planOutput = process.env.PLAN
+            const planOutput = process.env.PLAN;
             const output =[
             `#### Terraform Initialization \` ${{ steps.terraform-init-outcome }}\``,
             ``,
@@ -81,4 +81,42 @@ jobs:
             ].join('\n');
 
             github.rest.issues.createComment({
-            })
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            });
+      - name: terraform apply
+        id: terraform-apply
+        if: inputs.deploy == true
+        working-directory: terraform/environments/${{ inputs.terraform_environment }}
+        run: |
+          terraform apply -no-color -auto-approve
+        continue-on-error: true
+
+      - uses: actions/github-script@v7
+        if: inputs.deploy == true
+        env:
+          APPLY: "terraform\n${{ steps/terraform-apply.outputs.stdout }}\n{{ steps.terraform-apply.outputs.stderr }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const applyOutput = process.env.APPLY;
+            const output = [
+            `#### Terraform Apply \` {{ steps.terraform-apply.outcome }}\``,
+            ``,
+            `<details><summary>Show Output</summary>`,
+            ``,
+            '```terraform',
+            applyOutput,
+            '```',
+            ``,
+            `</details>`
+            ].join('\n');
+
+            github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+            });

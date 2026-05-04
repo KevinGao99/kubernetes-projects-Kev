@@ -1,0 +1,122 @@
+name: terraform action
+
+on:
+  workflow_call:
+    inputs:
+      deploy:
+        descritption: "Whether to deploy the terraform plan"
+        required: true
+        type: boolean
+      terraform_environment:
+        description: "Which terraform environment plan and execute"
+        required: true
+        type: string
+    secrets:
+      AWS_REGION:
+        description: "AWS region"
+        required: true
+      AWS_ACCESS_KEY_ID:
+        description: "AWS access key id"
+        required: true
+      AWS_SECRET_ACCESS_KEY:
+        descritpion: "AWS secret access key"
+        required: true
+jobs:
+  terraform:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: checkout
+        id: checkout
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+      
+      - name: configure aws credentials
+        id: configure-aws-credentials
+        uses: aws-actions/configure-aws-credentials@v4.1.0
+        with:
+          aws-region: ${{ secrets.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      
+      - name: set up terraform
+        id: setup-terraform
+        uses: hashicorp/setup-terraform@v3.1.2
+        with:
+          terraform_version: "1.11.4"
+      
+      - name: terraform init
+        id: terraform-init
+        working-directory: terraform/environments/${{ inputs.terraform_environment }}
+        run: |
+          terraform init -input=False
+      
+      - name: terraform plan
+        id: terraform-plan
+        working-directory: terraform/environments/${{ inputs.terraform_environment }}
+        run: |
+          terraform plan -no-color -input=False
+        continue-on-error: true
+      
+      - uses: actions/github-script@v7
+        env: PLAN: "terraform\n${{ steps.terraform-plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const planOutput = process.env.PLAN;
+            const output =[
+            `#### Terraform Initialization \` ${{ steps.terraform-init-outcome }}\``,
+            ``,
+            `#### Terraform Plan \`${{ steps.terraform-plan.outcome }}\``,
+            ``,
+            `<details><summary>Show Plan</summary>`,
+            ``,
+            '```terraform',
+            planOutput,
+            '```',
+            ``,
+            `</details>`,
+            ``,
+            `Comment '/terraform apply' to deploy changes`,
+            ].join('\n');
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            });
+      - name: terraform apply
+        id: terraform-apply
+        if: inputs.deploy == true
+        working-directory: terraform/environments/${{ inputs.terraform_environment }}
+        run: |
+          terraform apply -no-color -auto-approve
+        continue-on-error: true
+
+      - uses: actions/github-script@v7
+        if: inputs.deploy == true
+        env:
+          APPLY: "terraform\n${{ steps/terraform-apply.outputs.stdout }}\n{{ steps.terraform-apply.outputs.stderr }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const applyOutput = process.env.APPLY;
+            const output = [
+            `#### Terraform Apply \` {{ steps.terraform-apply.outcome }}\``,
+            ``,
+            `<details><summary>Show Output</summary>`,
+            ``,
+            '```terraform',
+            applyOutput,
+            '```',
+            ``,
+            `</details>`
+            ].join('\n');
+
+            github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+            });

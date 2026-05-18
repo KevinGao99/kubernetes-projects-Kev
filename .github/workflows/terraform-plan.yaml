@@ -16,14 +16,14 @@ on:
 permissions:
   contents: read
   issues: write
-  pull_requests: write
+  pull-requests: write
 
 jobs:
   aws-plan:
     strategy:
       matrix:
         terraform_environment: [kubernetes-the-hard-way-aws]
-    uses:  kubernetes-projects-Kev/.github/workflows/terraform-action.yaml@main
+    uses:  KevinGao99/kubernetes-projects-Kev/.github/workflows/terraform-action.yaml@main
     with:
       deploy: false
       terraform_environment: ${{ matrix.terraform_environment }}

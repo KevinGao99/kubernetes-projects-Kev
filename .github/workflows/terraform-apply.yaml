@@ -13,7 +13,10 @@ permissions:
 jobs:
     pattern-match:
       runs-on: ubuntu-22.04
-      if: ${{ github.event.issue.pull_request && github.event.comment.body == '/terraform apply' }}
+      if: |
+            github.event.issue.pull_request && 
+            github.event.comment.body == '/terraform apply' &&
+            (github.event.comment.author_association == 'OWNER' || github.event.comment.author_association == 'COLLABORATOR')
       outputs:
         pr_number: ${{ steps.get-pr-number.outputs.pr_number }}
       steps:
@@ -21,8 +24,8 @@ jobs:
           id: get-pr-number
           run: |
             PR_URL="${{ github.event.issue.pull_request.url }}"
-            echo Pull request number: ${PR_RUL##*/}
-            echo "pr_number=${PR_URL##*/}" >> "GITHUB_OUTPUT"
+            echo Pull request number: ${PR_URL##*/}
+            echo "pr_number=${PR_URL##*/}" >> "$GITHUB_OUTPUT"
     aws-deploy:
         needs: pattern-match
         strategy:

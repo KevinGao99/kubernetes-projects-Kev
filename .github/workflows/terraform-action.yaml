@@ -59,6 +59,7 @@ jobs:
         continue-on-error: true
       
       - uses: actions/github-script@v7
+        if: inputs.deploy==false
         env: 
           PLAN: "terraform\n${{ steps.terraform-plan.outputs.stdout }}"
         with:

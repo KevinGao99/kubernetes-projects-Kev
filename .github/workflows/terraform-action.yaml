@@ -19,7 +19,7 @@ on:
         description: "AWS access key id"
         required: true
       AWS_SECRET_ACCESS_KEY:
-        descritpion: "AWS secret access key"
+        description: "AWS secret access key"
         required: true
 jobs:
   terraform:

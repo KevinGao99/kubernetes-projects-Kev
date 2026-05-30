@@ -9,7 +9,7 @@ on:
     branches:
       - main
     paths:
-      - "terrafrom/**"
+      - "terraform/**"
       - ".github/workflows/teraform-plan.yaml"
       - ".github/workflows/terraform-action.yaml"
 

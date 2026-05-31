@@ -36,6 +36,7 @@ jobs:
           deploy: true
           terraform_environment: ${{ matrix.terraform_environment }}
           pr_number: ${{ fromJson(needs.pattern-match.outputs.pr_number) }}
+          checkout_ref: ${{ format('refs/pull/{0}/merge', needs.pattern-match.outputs.pr_number) }}
         secrets:
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

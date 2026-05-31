@@ -12,6 +12,9 @@ on:
       - "terraform/**"
       - ".github/workflows/teraform-plan.yaml"
       - ".github/workflows/terraform-action.yaml"
+  issue_comment:
+    types:
+      - created
 
 permissions:
   contents: read
@@ -20,6 +23,13 @@ permissions:
 
 jobs:
   aws-plan:
+    if: |
+      github.event_name == 'pull_request' ||
+      (
+        github.event_name == 'issue_comment' &&
+        github.event.issue.pull_request &&
+        contains(github.event.comment.body, 'terraform plan')
+      )
     strategy:
       matrix:
         terraform_environment: [kubernetes-the-hard-way-aws]
@@ -28,6 +38,7 @@ jobs:
       deploy: false
       terraform_environment: ${{ matrix.terraform_environment }}
       pr_number: ${{ github.event.number }}
+      checkout_ref: ${{ github.event_name == 'issue_comment' && format('refs/pull/{0}/merge', github.event.issue.number) || github.ref }}
     secrets:
       AWS_REGION: ${{ secrets.AWS_REGION }}
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

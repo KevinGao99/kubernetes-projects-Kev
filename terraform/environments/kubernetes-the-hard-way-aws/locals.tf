@@ -98,4 +98,6 @@ controller_key_name              = "kubernetes"
 controller_associate_public_ip   = true
 controller_private_ip_prefix     = "10.0.1.1"
 controller_ebs_block_volume_size = 50
+
+internal_nlb = false
 }

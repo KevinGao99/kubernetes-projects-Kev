@@ -48,7 +48,7 @@ jobs:
         uses: actions/checkout@v4.2.2
         with:
           ref: ${{ inputs.checkout_ref }}
-          fetch_depth: 0
+          fetch-depth: 0
       
       - name: configure aws credentials
         id: configure-aws-credentials
@@ -80,11 +80,17 @@ jobs:
       - uses: actions/github-script@v7
         if: inputs.deploy==false
         env: 
-          PLAN: "terraform\n${{ steps.terraform-plan.outputs.stdout }}"
+          PLAN_STDOUT: "${{ steps.terraform-plan.outputs.stdout }}"
+          PLAN_STDERR: "${{ steps.terraform-plan.outputs.stderr }}"
+          PLAN_EXITCODE: "${{ steps.terraform-plan.outputs.exitcode }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const planOutput = process.env.PLAN;
+            const planOutput = ['STDOUT:',
+            process.env.PLAN_STDOUT || '-------no stdout-------',
+            '', 
+            'STDERR:',
+            process.env.PLAN_STDERR || '-------no error-------'].join('\n');
             const output =[
             `#### Terraform Initialization \` ${{ steps.terraform-init.outcome }}\``,
             ``,

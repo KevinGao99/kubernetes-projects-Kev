@@ -1,6 +1,7 @@
 resource "aws_security_group" "main_sg" {
   name        = "${local.environment}-${local.application}-main-sg"
   description = "security_group_for kubernetes"
+  vpc_id      = aws_vpc.main_vpc.id
   dynamic "ingress" {
     for_each = local.ingress_rules
     content {

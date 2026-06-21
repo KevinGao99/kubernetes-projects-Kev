@@ -10,7 +10,7 @@ on:
       - main
     paths:
       - "terraform/**"
-      - ".github/workflows/teraform-plan.yaml"
+      - ".github/workflows/terraform-plan.yaml"
       - ".github/workflows/terraform-action.yaml"
   issue_comment:
     types:

@@ -1,2 +1,8 @@
 .env
 .pem
+aws/
+.zip
+cfssl-certinfo
+.json
+cfssl
+cfssljson

@@ -5,7 +5,7 @@ resource "aws_instance" "kubernetes_controllers" {
   key_name                    = local.controller_key_name
   security_groups             = [aws_security_group.main_sg.id]
   instance_type               = local.controller_instance_type
-  private_ip                  = "${local.controller_private_ip_prefix}-${count.index}"
+  private_ip                  = "${local.controller_private_ip_prefix}.${count.index}"
   user_data                   = "name=k8s-controller-${count.index}"
   subnet_id                   = aws_subnet.k8s_subnet.id
   source_dest_check           = false

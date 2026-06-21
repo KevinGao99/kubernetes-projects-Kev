@@ -5,9 +5,16 @@ terraform {
       version = "~> 6.0"
     }
   }
+  backend "s3" {
+    bucket       = "terraform-state-us-east-2-481948945346"
+    key          = "terraform.tfstate"
+    region       = "us-east-2"
+    use_lockfile = true
+  }
 }
 
 # Configure the AWS Provider
 provider "aws" {
-  region = "us-west-2"
+  region = "us-east-2"
 }
+

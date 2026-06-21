@@ -1,6 +1,7 @@
 data "aws_key_pair" "kubernetes" {
   key_name           = "kubernetes"
   include_public_key = true
+  region             = "us-west-2"
 
 }
 resource "aws_instance" "kubernetes_controllers" {

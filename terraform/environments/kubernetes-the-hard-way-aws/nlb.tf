@@ -11,14 +11,14 @@ resource "aws_lb" "kubernetes_nlb" {
 }
 
 resource "aws_lb_target_group" "main_tg" {
-  name        = "${local.environment}-${local.application}-target-group"
+  name        = "${local.environment}-${local.application}-tg"
   port        = local.target_group_port
   protocol    = local.target_group_protocol
   vpc_id      = aws_vpc.main_vpc.id
   target_type = local.target_group_target_type
 
   tags = merge(
-    { name = "${local.environment}-${local.application}-target-group" },
+    { name = "${local.environment}-${local.application}-tg" },
     local.k8s_tags
   )
 }

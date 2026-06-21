@@ -1,5 +1,5 @@
 resource "aws_lb" "kubernetes_nlb" {
-  name               = "${local.environment}-${local.application}-nlb"
+  name               = "${local.application}-nlb"
   subnets            = [aws_subnet.k8s_subnet.id]
   internal           = local.internal_nlb
   load_balancer_type = local.load_balancer_type
@@ -11,7 +11,7 @@ resource "aws_lb" "kubernetes_nlb" {
 }
 
 resource "aws_lb_target_group" "main_tg" {
-  name        = "${local.environment}-${local.application}-tg"
+  name        = "${local.application}-tg"
   port        = local.target_group_port
   protocol    = local.target_group_protocol
   vpc_id      = aws_vpc.main_vpc.id

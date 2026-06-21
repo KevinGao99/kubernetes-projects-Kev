@@ -15,8 +15,8 @@ resource "aws_route" "main_route" {
 resource "aws_route" "pod_network_route" {
   count                  = length(local.pod_network_cidr_blocks)
   network_interface_id   = aws_instance.kubernetes_workers[count.index].primary_networker_interface_id
-  destination_cidr_block = "${pod_network_cidr_blocks}[count.index]"
-  route_table_id         = aws_route_table.main_route.id
+  destination_cidr_block = "${local.pod_network_cidr_blocks}[count.index]"
+  route_table_id         = aws_route_table.main_rtb.id
 }
 
 resource "aws_route_table_association" "main_association" {

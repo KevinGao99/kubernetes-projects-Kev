@@ -1,4 +1,3 @@
-resource ""
 resource "aws_instance" "kubernetes_controllers" {
   count                       = local.controller_instance_count
   associate_public_ip_address = local.controller_associate_public_ip

@@ -1,14 +1,14 @@
 locals {
   # Global config
-  aws_region = "us-west-2"
+  aws_region     = "us-east-2"
+  aws_account_id = "481948945346"
   # VPC config
   cidr_block = "10.0.0.0/16"
   # Tags
-  owner        = "default"
-  environment  = "kubernetes-the-hard-way-aws"
-  cost_centers = "kubernetes-the-hard-way"
-  application  = "k8s"
-
+  owner                     = "default"
+  environment               = "kubernetes-the-hard-way-aws"
+  cost_centers              = "kubernetes-the-hard-way"
+  application               = "k8s"
   public_subnet_cidr_blocks = "10.0.1.0/24"
 
   # Security Group
@@ -78,7 +78,7 @@ locals {
 
   # Worker Instance
   worker_instance_count        = 3
-  worker_image_id              = "ami-0a15226b1f7f23580"
+  worker_image_id              = "ami-076838d6a293cb49e"
   worker_instance_type         = "t3.micro"
   worker_key_name              = "kubernetes"
   worker_associate_public_ip   = true
@@ -92,7 +92,7 @@ locals {
 
   # controller Instance
   controller_instance_count        = 3
-  controller_image_id              = "ami-0a15226b1f7f23580"
+  controller_image_id              = "ami-076838d6a293cb49e"
   controller_instance_type         = "t3.micro"
   controller_key_name              = "kubernetes"
   controller_associate_public_ip   = true

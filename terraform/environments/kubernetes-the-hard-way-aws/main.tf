@@ -6,7 +6,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket       = "terraform-state-${local.aws_region}-${local.aws_account_id}"
+    bucket       = "terraform-state-us-east-2-481948945346"
     key          = "terraform.tfstate"
     region       = "us-east-2"
     use_lockfile = true

@@ -124,13 +124,13 @@ jobs:
       - uses: actions/github-script@v7
         if: inputs.deploy == true
         env:
-          APPLY: "terraform\n${{ steps.terraform-apply.outputs.stdout }}\n{{ steps.terraform-apply.outputs.stderr }}"
+          APPLY: "terraform\n${{ steps.terraform-apply.outputs.stdout }}\n${{ steps.terraform-apply.outputs.stderr }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const applyOutput = process.env.APPLY;
             const output = [
-            `#### Terraform Apply \` {{ steps.terraform-apply.outcome }}\``,
+            `#### Terraform Apply \` ${{ steps.terraform-apply.outcome }}\``,
             ``,
             `<details><summary>Show Output</summary>`,
             ``,

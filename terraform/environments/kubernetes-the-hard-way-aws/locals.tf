@@ -78,7 +78,7 @@ locals {
 
   # Worker Instance
   worker_instance_count        = 3
-  worker_image_id              = "ami-0e83be366243f524a"
+  worker_image_id              = "ami-0a15226b1f7f23580"
   worker_instance_type         = "t3.micro"
   worker_key_name              = "kubernetes"
   worker_associate_public_ip   = true
@@ -92,7 +92,7 @@ locals {
 
   # controller Instance
   controller_instance_count        = 3
-  controller_image_id              = "ami-0e83be366243f524a"
+  controller_image_id              = "ami-0a15226b1f7f23580"
   controller_instance_type         = "t3.micro"
   controller_key_name              = "kubernetes"
   controller_associate_public_ip   = true

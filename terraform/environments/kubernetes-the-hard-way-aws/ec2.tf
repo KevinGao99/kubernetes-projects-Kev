@@ -1,8 +1,13 @@
+data "aws_key_pair" "kubernetes" {
+  key_name           = "kubernetes"
+  include_public_key = true
+
+}
 resource "aws_instance" "kubernetes_controllers" {
   count                       = local.controller_instance_count
   associate_public_ip_address = local.controller_associate_public_ip
   ami                         = local.controller_image_id
-  key_name                    = local.controller_key_name
+  key_name                    = data.aws_key_pair.kubernetes.key_name
   security_groups             = [aws_security_group.main_sg.id]
   instance_type               = local.controller_instance_type
   private_ip                  = "${local.controller_private_ip_prefix}${count.index + 1}"
@@ -25,7 +30,7 @@ resource "aws_instance" "kubernetes_workers" {
   count                       = local.worker_instance_count
   ami                         = local.worker_image_id
   instance_type               = local.worker_instance_type
-  key_name                    = local.worker_key_name
+  key_name                    = data.aws_key_pair.kubernetes.key_name
   security_groups             = [aws_security_group.main_sg.id]
   associate_public_ip_address = local.worker_associate_public_ip
   subnet_id                   = aws_subnet.k8s_subnet.id

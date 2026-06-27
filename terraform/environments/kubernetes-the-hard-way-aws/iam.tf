@@ -20,16 +20,9 @@ resource "aws_iam_user_policy" "kubernetes_admin_policy" {
                 "ec2:*"
             ],
             "Resource": [
-            "${join(",\n",
-  concat(
-    formatlist(
-      "%q", aws_instance.kubernetes_controllers[*].arn
-    ),
-    formatlist(
-      "%q", aws_instance.kubernetes_workers[*].arn
-    )
-  )
-)}"
+            "${jsonencode(
+            concat(aws_instance.kubernetes_controllers[*].arn, aws_instance.kubernetes_workers[*].arn)
+            )}"
             ] 
         }
     ]

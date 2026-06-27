@@ -17,7 +17,7 @@ resource "aws_iam_user_policy" "kubernetes_admin_policy" {
             "Sid": "Statement1",
             "Effect": "Allow",
             "Action": [
-                "ec2:*",
+                "ec2:*"
             ],
             "Resource": [
             "${join(",\n",

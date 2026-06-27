@@ -45,7 +45,7 @@ resource "aws_instance" "kubernetes_workers" {
   tags = merge(
     local.k8s_tags,
     {
-      name = "${local.environment}-{local.application}-worker-${count.index}"
+      name = "${local.environment}-${local.application}-worker-${count.index}"
     }
   )
 }

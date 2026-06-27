@@ -100,4 +100,6 @@ locals {
   controller_ebs_block_volume_size = 50
 
   internal_nlb = false
+  # iam user name
+  kubernetes_admin_name = "kubernetes-admin"
 }

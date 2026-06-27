@@ -38,13 +38,13 @@ resource "aws_iam_user_policy" "kubernetes_admin_policy" {
 }
 
 output "kubernetes_admin_iam_access_key_id" {
-  description = "Iam key id for ${aws_iam_user.kubernetes_admin.name}"
+  description = "Iam key id for kubernetes admin"
   value       = aws_iam_access_key.kubernetes_admin_bash_key.id
   sensitive   = true
 }
 
 output "kubernetes_admin_iam_access_key_secret" {
-  description = "Access key secret for ${aws_iam_user.kubernetes_admin.name}"
+  description = "Access key secret for kubernetes admin"
   value       = aws_iam_access_key.kubernetes_admin_bash_key.secret
   sensitive   = true
 }

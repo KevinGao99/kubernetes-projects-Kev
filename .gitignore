@@ -1,8 +1,8 @@
 *.env
-.pem
+*.pem
 aws/
 *.zip
 cfssl-certinfo
-.json
+*.json
 /cfssl
 /cfssljson

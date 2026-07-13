@@ -20,7 +20,7 @@ EOF
 echo "Encryption key ${KEY_NAME} written to key file ${KEY_FILE_NAME}"
 echo "Copying key file ${KEY_FILE_NAME} to eks controllers"
 for instance in $CONTROLLER_LIST; do
-    external_ip=$(aws ec2 describe_instances --region "${AWS_REGION}" --filters \
+    external_ip=$(aws ec2 describe-instances --region "${AWS_REGION}" --filters \
         "Name=tag:Name,Values=kubernetes-the-hard-way-aws-k8s-${instance}" \
         "Name=instance-state-name,Values=running"
         --output text --query 'Reservations[].Instances[].PublicIpAddress'
